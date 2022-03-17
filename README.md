@@ -1,5 +1,22 @@
 # challenge-digikare
 
+## Build docker image
+
+### Requirements
+
+- docker
+- docker-compose
+
+### Commands
+
+```shell
+# Build app image
+docker-compose build
+
+# Start
+docker-compose up --detach --remove-orphans
+```
+
 ## Build 
 
 ### Requirements

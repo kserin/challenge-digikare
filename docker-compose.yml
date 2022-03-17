@@ -1,0 +1,21 @@
+version: '3'
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: test
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+
+  backend:
+    container_name: backend
+    build:
+      context: ./
+      network: host
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
