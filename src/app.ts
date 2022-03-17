@@ -1,15 +1,28 @@
 import express from "express";
+import { dbConnect, getDb } from "./dao/db";
+import userDao from "./dao/userDao";
 import logger from "./logger";
 import properties from "./properties";
 
 const app = express();
 
-app.get("/hello", (_, res) => {
+app.get("/hello", async (_, res) => {
+    await userDao.create({
+        _id: undefined,
+        email: "email",
+        consents: []
+    });
+    const users = await userDao.list();
     res.set("Content-Type", "application/json")
         .status(200)
-        .send(JSON.stringify({"Hello": "World"}));
+        .send(JSON.stringify(users));
 });
 
-app.listen(properties.get("server.port"), () => {
-    logger.info(`Started on port ${properties.get("server.port")}!`)
+logger.info("Connecting to database ...");
+dbConnect().then(() => {
+    app.listen(properties.get("server.port"), () => {
+        logger.info(`Started on port ${properties.get("server.port")}!`);
+    });
+}).catch((e) => {
+    logger.error(`Cannot connect to database: ${e}`);
 });
