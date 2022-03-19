@@ -3,8 +3,11 @@ import { dbConnect, getDb } from "./dao/db";
 import userDao from "./dao/userDao";
 import logger from "./logger";
 import properties from "./properties";
+import userRouter from "./routers/userRouter";
 
 const app = express();
+
+app.use("/users", userRouter);
 
 app.get("/hello", async (_, res) => {
     await userDao.create({

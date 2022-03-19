@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { User } from "../domain/User";
 import logger from "../logger";
 import { getDb } from "./db";
@@ -7,9 +8,18 @@ export class UserDao {
 
     public async get(id: string): Promise<User | null> {
         try {
-            return await getDb().collection(UserDao.COLLECTION).findOne({id}) as User;
+            return await getDb().collection(UserDao.COLLECTION).findOne({_id: new ObjectId(id)}) as User;
         } catch (e) {
-            logger.error(`Cannot get user ${id} from database`, e);
+            logger.debug(`Cannot get user ${id} from database`, e);
+            return null;
+        }
+    }
+
+    public async getByEmail(email: string): Promise<User | null> {
+        try {
+            return await getDb().collection(UserDao.COLLECTION).findOne({email}) as User;
+        } catch (e) {
+            logger.debug(`Cannot get user ${email} from database`, e);
             return null;
         }
     }
@@ -18,16 +28,16 @@ export class UserDao {
         try {
             return await getDb().collection(UserDao.COLLECTION).find({}).toArray() as User[];
         } catch (e) {
-            logger.error("Cannot list user from database", e);
+            logger.debug("Cannot list user from database", e);
             return [];
         }
     }
 
     public async delete(id: string): Promise<void> {
         try {
-            await getDb().collection(UserDao.COLLECTION).deleteOne({id});
+            await getDb().collection(UserDao.COLLECTION).deleteOne({_id: new ObjectId(id)});
         } catch (e) {
-            logger.error(`Cannot delete user ${id} from database`, e);
+            logger.debug(`Cannot delete user ${id} from database`, e);
         }
     }
 
@@ -35,10 +45,7 @@ export class UserDao {
         if (!user._id) {
             throw new Error("Cannot update user with identifier");
         }
-        const result = await getDb().collection(UserDao.COLLECTION).updateOne({_id: user._id}, user)
-        if (result.modifiedCount === 0) {
-            throw new Error(`User ${user._id} not updated`);
-        }
+        await getDb().collection(UserDao.COLLECTION).updateOne({_id: user._id}, {$set: user})
         return user;
     }
 
