@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import { Collection, FindCursor, ObjectId, OptionalId } from "mongodb";
 import Sinon from "sinon";
-import userDao from "../src/dao/userDao";
-import { User } from "../src/domain/User";
-import db = require("../src/dao/db");
+import userDao from "../../src/dao/userDao";
+import { User } from "../../src/domain/User";
+import db = require("../../src/dao/db");
 
 let stubDb: any;
 let stubCollection: Sinon.SinonStubbedInstance<Collection>;
