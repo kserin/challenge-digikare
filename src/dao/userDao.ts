@@ -43,7 +43,7 @@ export class UserDao {
 
     public async update(user: User): Promise<User> {
         if (!user._id) {
-            throw new Error("Cannot update user with identifier");
+            throw new Error("Cannot update user without identifier");
         }
         await getDb().collection(UserDao.COLLECTION).updateOne({_id: user._id}, {$set: user})
         return user;
