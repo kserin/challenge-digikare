@@ -3,7 +3,7 @@ import { User } from "../domain/User";
 import { ConsentDto } from "./ConsentDto";
 import { DtoConvertError } from "./DtoConvertError";
 
-interface UserDtoInterface {
+export interface UserDtoInterface {
     id: string | undefined;
     email: string;
     consents: ConsentDto[];

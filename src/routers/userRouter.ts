@@ -66,7 +66,7 @@ userRouter.put("/:id", async (req, res) => {
 userRouter.delete("/:id", async (req, res) => {
     try {
         await userService.delete(req.params.id);
-        res.send(200).send();
+        res.sendStatus(200);
     } catch (e) {
         if (e instanceof UserError) {
             error(res, 400, {code: e.type, message: e.message})

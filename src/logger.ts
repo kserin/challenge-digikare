@@ -1,3 +1,4 @@
+import { env } from "process";
 import winston from "winston";
 
 const logger = winston.createLogger({
@@ -7,7 +8,8 @@ const logger = winston.createLogger({
             format: winston.format.combine(
                 winston.format.errors({stack: true}),
                 winston.format.simple(),
-            )
+            ),
+            silent: (env.TESTS) ? true : false
         })
     ]
 });

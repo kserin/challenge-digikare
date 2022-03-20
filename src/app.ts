@@ -1,5 +1,5 @@
 import express from "express";
-import { dbConnect, getDb } from "./dao/db";
+import { dbConnect } from "./dao/db";
 import userDao from "./dao/userDao";
 import logger from "./logger";
 import properties from "./properties";
