@@ -132,4 +132,21 @@ describe("ConsentService", () => {
             })).to.equals(true);
         });
     });
+
+    describe("list", () => {
+        it("should return list of events", async () => {
+            const id = "000000000000000000000001";
+            const event: ConsentEvent = {
+                userId: new ObjectId("000000000000000000000001"),
+                date: new Date(),
+                consents: []
+            };
+            stubEventDao.list.withArgs(new ObjectId(id)).resolves([event]);
+
+            const result = await service.list(id);
+
+            expect(result.length).to.equals(1);
+            expect(result[0]).to.equals(event);
+        });
+    });
 });

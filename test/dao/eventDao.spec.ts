@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Collection, ObjectId } from "mongodb";
+import { Collection, FindCursor, ObjectId } from "mongodb";
 import Sinon from "sinon";
 import db = require("../../src/dao/db");
 import eventDao from "../../src/dao/eventDao";
@@ -52,6 +52,38 @@ describe("eventDao", () => {
             }
 
             expect(thrown).to.equals(true);
+        });
+    });
+
+    describe("list", () => {
+        it("should return events", async () => {
+            const stubCursor = Sinon.createStubInstance(FindCursor);
+            stubCursor.toArray.resolves([{
+                _id: new ObjectId("000000000000000000000000"),
+                userId: new ObjectId("000000000000000000000001"),
+                consents: [],
+                date: new Date(),
+            }]);
+            stubCollection.find.withArgs({}).returns(stubCursor);
+
+            const result = await eventDao.list();
+
+            expect(result.length).to.equals(1);
+        });
+
+        it("should return events filtered by user id", async () => {
+            const stubCursor = Sinon.createStubInstance(FindCursor);
+            stubCursor.toArray.resolves([{
+                _id: new ObjectId("000000000000000000000000"),
+                userId: new ObjectId("000000000000000000000001"),
+                consents: [],
+                date: new Date(),
+            }]);
+            stubCollection.find.withArgs({userId: new ObjectId("000000000000000000000001")}).returns(stubCursor);
+
+            const result = await eventDao.list(new ObjectId("000000000000000000000001"));
+
+            expect(result.length).to.equals(1);
         });
     });
 });

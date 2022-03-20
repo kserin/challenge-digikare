@@ -10,7 +10,7 @@ import eventRouter from "../../src/routers/eventRouter";
 import { ErrorDto } from "../../src/routers/routerUtils";
 import consentService, { ConsentService } from "../../src/services/consentService";
 import { UserError } from "../../src/services/UserError";
-import { post } from "./httpUtils";
+import { get, post } from "./httpUtils";
 
 const app = express();
 app.use("/", eventRouter);
@@ -123,6 +123,60 @@ describe("eventRouter", () => {
             expect(code).to.equals(500);
             expect(result.code).to.equals("INTERNAL_ERROR");
             expect(result.message).to.equals("An error");
+        });
+    });
+
+    describe("GET /", () => {
+        it("should return all events", async () => {
+            const event: ConsentEvent = {
+                _id: new ObjectId("000000000000000000000000"),
+                date: new Date(),
+                userId: new ObjectId("000000000000000000000001"),
+                consents: []
+            };
+            stubService.list.resolves([event]);
+
+            const [code, result]: [number, ConsentEventDto[]] = await get(`http://localhost:${port}/`);
+
+            expect(code).to.equals(200);
+            expect(result.length).to.equals(1);
+            expect(result[0].user.id).to.equals("000000000000000000000001");
+            expect(result[0].consents.length).to.equals(0);
+        });
+
+        it("should return 500 when unexpected error happens", async () => {
+            const event: ConsentEvent = {
+                _id: new ObjectId("000000000000000000000000"),
+                date: new Date(),
+                userId: new ObjectId("000000000000000000000001"),
+                consents: []
+            };
+            stubService.list.throws(new Error("An error"));
+
+            const [code, result]: [number, ErrorDto] = await get(`http://localhost:${port}/`);
+
+            expect(code).to.equals(500);
+            expect(result.code).to.equals("INTERNAL_ERROR");
+            expect(result.message).to.equals("An error");
+        });
+    });
+
+    describe("GET /?user=:id", () => {
+        it("should return all events for given user", async () => {
+            const event: ConsentEvent = {
+                _id: new ObjectId("000000000000000000000000"),
+                date: new Date(),
+                userId: new ObjectId("000000000000000000000001"),
+                consents: []
+            };
+            stubService.list.withArgs("000000000000000000000001").resolves([event]);
+
+            const [code, result]: [number, ConsentEventDto[]] = await get(`http://localhost:${port}/?user=000000000000000000000001`);
+
+            expect(code).to.equals(200);
+            expect(result.length).to.equals(1);
+            expect(result[0].user.id).to.equals("000000000000000000000001");
+            expect(result[0].consents.length).to.equals(0);
         });
     });
 });

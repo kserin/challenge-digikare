@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import dao, { EventDao } from "../dao/eventDao";
 import { Consent } from "../domain/Consent";
 import { ConsentEvent } from "../domain/Event";
@@ -19,6 +20,10 @@ export class ConsentService {
         const [_, result] = await Promise.all([this.userService.update(user), this.eventDao.create(event)]);
 
         return result;
+    }
+
+    public async list(userId?: string): Promise<ConsentEvent[]> {
+        return await this.eventDao.list(userId ? new ObjectId(userId) : undefined);
     }
 
     private setUserConsent(user: User, consent: Consent) {

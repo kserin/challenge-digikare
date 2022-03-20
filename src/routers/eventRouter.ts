@@ -24,4 +24,14 @@ eventRouter.post("/", async (req, res) => {
     }
 });
 
+eventRouter.get("/", async (req, res) => {
+    try {
+        const userId = (req.query.user) ? req.query.user as string : undefined;
+        const result = (await consentService.list(userId)).map((consent) => ConsentEventDto.fromEvent(consent));
+        json(res, result);
+    } catch (e) {
+        serverError(res, e);
+    }
+});
+
 export default eventRouter;
