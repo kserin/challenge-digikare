@@ -5,19 +5,18 @@ import userDao from "../../src/dao/userDao";
 import { User } from "../../src/domain/User";
 import db = require("../../src/dao/db");
 
-let stubDb: any;
-let stubCollection: Sinon.SinonStubbedInstance<Collection>;
-beforeEach(() => {
-    stubCollection = Sinon.createStubInstance(Collection);
-    stubDb = Sinon.stub(db, "getDb");
-    stubDb.returns({collection: () => stubCollection});
-});
-
-afterEach(() => {
-    stubDb.restore();
-});
-
 describe("userDao", () => {
+    let stubCollection: Sinon.SinonStubbedInstance<Collection>;
+    beforeEach(() => {
+        stubCollection = Sinon.createStubInstance(Collection);
+        const stubDb: any = Sinon.stub(db, "getDb");
+        stubDb.returns({collection: () => stubCollection});
+    });
+
+    afterEach(() => {
+        Sinon.restore();
+    });
+
     describe("get", () => {
         it("should return user by given id", async () => {
             const user: User = {

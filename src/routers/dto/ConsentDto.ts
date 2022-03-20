@@ -1,7 +1,7 @@
-import { Consent } from "../domain/Consent";
+import { Consent } from "../../domain/Consent";
 import { DtoConvertError } from "./DtoConvertError";
 
-interface ConsentDtoInterface {
+export interface ConsentDtoInterface {
     id: "email_notifications" | "sms_notifications";
     enabled: boolean;
 }
@@ -23,7 +23,7 @@ export class ConsentDto implements ConsentDtoInterface {
     }
 
     public static fromObject(object: any): ConsentDto {
-        if (["email_notifications", "sms_notifications"].includes(object.id)) {
+        if (!["email_notifications", "sms_notifications"].includes(object.id)) {
             throw new DtoConvertError("Incorrect consent id");
         }
         if (typeof object.enabled !== "boolean") {

@@ -6,7 +6,7 @@ import { AddressInfo } from "net";
 import Sinon from "sinon";
 import { User } from "../../src/domain/User";
 import { ErrorDto } from "../../src/routers/routerUtils";
-import { UserDto, UserDtoInterface } from "../../src/routers/UserDto";
+import { UserDto, UserDtoInterface } from "../../src/routers/dto/UserDto";
 import userRouter from "../../src/routers/userRouter";
 import { UserError } from "../../src/services/UserError";
 import userService, { UserService } from "../../src/services/userService";
@@ -19,26 +19,26 @@ let port: number
 
 let stubService: Sinon.SinonStubbedInstance<UserService>;
 
-before((done) => {
-    server.listen(0, () => {
-        port = (server.address() as AddressInfo).port;
-        done();
-    });
-});
-
-after(() => {
-    server.close();
-});
-
-beforeEach(() => {
-    stubService = Sinon.stub(userService);
-});
-
-afterEach(() => {
-    Sinon.restore();
-});
-
 describe("userRouter", () => {
+    before((done) => {
+        server.listen(0, () => {
+            port = (server.address() as AddressInfo).port;
+            done();
+        });
+    });
+
+    after(() => {
+        server.close();
+    });
+
+    beforeEach(() => {
+        stubService = Sinon.stub(userService);
+    });
+
+    afterEach(() => {
+        Sinon.restore();
+    });
+
     describe("GET /", () => {
         it("should return all users", async () => {
             stubService.list.resolves([

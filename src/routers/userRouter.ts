@@ -1,9 +1,9 @@
 import express, { Router } from "express";
 import { UserError } from "../services/UserError";
 import userService from "../services/userService";
-import { DtoConvertError } from "./DtoConvertError";
+import { DtoConvertError } from "./dto/DtoConvertError";
 import { error, json, serverError } from "./routerUtils";
-import { UserDto } from "./UserDto";
+import { UserDto } from "./dto/UserDto";
 
 const userRouter = Router();
 userRouter.use(express.json());

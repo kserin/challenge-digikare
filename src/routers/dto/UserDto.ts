@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { User } from "../domain/User";
+import { User } from "../../domain/User";
 import { ConsentDto } from "./ConsentDto";
 import { DtoConvertError } from "./DtoConvertError";
 

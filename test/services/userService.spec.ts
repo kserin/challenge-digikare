@@ -6,15 +6,16 @@ import { User } from "../../src/domain/User";
 import { UserError } from "../../src/services/UserError";
 import { UserService } from "../../src/services/userService";
 
-let stubUserDao: Sinon.SinonStubbedInstance<UserDao>;
-let service: UserService;
-
-beforeEach(() => {
-    stubUserDao = Sinon.createStubInstance(UserDao);
-    service = new UserService(stubUserDao);
-});
 
 describe("UserService", () => {
+    let stubUserDao: Sinon.SinonStubbedInstance<UserDao>;
+    let service: UserService;
+
+    beforeEach(() => {
+        stubUserDao = Sinon.createStubInstance(UserDao);
+        service = new UserService(stubUserDao);
+    });
+
     describe("create", () => {
         it("should create new user", async () => {
             const user: User = {

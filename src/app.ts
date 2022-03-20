@@ -4,22 +4,12 @@ import userDao from "./dao/userDao";
 import logger from "./logger";
 import properties from "./properties";
 import userRouter from "./routers/userRouter";
+import eventRouter from "./routers/eventRouter";
 
 const app = express();
 
 app.use("/users", userRouter);
-
-app.get("/hello", async (_, res) => {
-    await userDao.create({
-        _id: undefined,
-        email: "email",
-        consents: []
-    });
-    const users = await userDao.list();
-    res.set("Content-Type", "application/json")
-        .status(200)
-        .send(JSON.stringify(users));
-});
+app.use("/events", eventRouter)
 
 logger.info("Connecting to database ...");
 dbConnect().then(() => {
