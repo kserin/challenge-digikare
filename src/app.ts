@@ -1,6 +1,5 @@
 import express from "express";
 import { dbConnect } from "./dao/db";
-import userDao from "./dao/userDao";
 import logger from "./logger";
 import properties from "./properties";
 import userRouter from "./routers/userRouter";
