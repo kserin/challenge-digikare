@@ -5,7 +5,7 @@
     "build": "rm -rf ./dist && ./node_modules/.bin/tsc && cp src/*.properties ./dist/",
     "lint": "./node_modules/.bin/tslint --project tsconfig.json",
     "start": "node ./dist/app.js",
-    "test": "TESTS=true ./node_modules/.bin/mocha --require ts-node/register './test/**/*.spec.ts'"
+    "test": "TESTS=true SERVER_PORT=8888 ./node_modules/.bin/mocha --require ts-node/register './test/**/*.spec.ts'"
   },
   "repository": {
     "type": "git",
